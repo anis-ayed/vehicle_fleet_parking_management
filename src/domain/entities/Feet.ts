@@ -6,8 +6,8 @@ import { Location } from '../valuesObject/Location';
 export class Fleet {
   id: string;
   userId: string;
-  private vehicles: Map<string, Vehicle> = new Map();
-  private locations: Map<string, Location>;
+  vehicles: Map<string, Vehicle> = new Map();
+  locations: Map<string, Location>;
 
   constructor(id: string, userId: string) {
     this.id = id;
@@ -63,5 +63,9 @@ export class Fleet {
       );
     }
     return false;
+  }
+
+  getLocationOfVehicle(plateNumber: string): Location {
+    return this.locations.get(plateNumber) as Location;
   }
 }

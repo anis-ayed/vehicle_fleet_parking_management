@@ -1,8 +1,8 @@
 import { ParkVehicleCommand } from '../commands/ParkVehicleCommand';
 import { Fleet } from '../../domain/entities/Feet';
-import { FleetRepository } from '../../infra/FeetRepository';
-import { VehicleLocationRepository } from '../../infra/VehicleLocationRepository';
 import { Vehicle } from '../../domain/entities/Vehicle';
+import { VehicleLocationRepository } from '../../domain/repositories/VehicleLocationRepository';
+import { FleetRepository } from '../../domain/repositories/FleetRepository';
 
 /**
  * Handler for parking a vehicle.
@@ -11,7 +11,7 @@ export class ParkVehicleHandler {
   /**
    * Creates an instance of ParkVehicleHandler.
    * @param {FleetRepository} fleetRepository - The repository to manage fleet data.
-   * @param {VehicleLocationRepository} vehicleLocationRepository - The repository to manage vehicle location data.
+   * @param {VehicleLocationRepositoryInMemory} vehicleLocationRepository - The repository to manage vehicle location data.
    */
   constructor(
     private readonly fleetRepository: FleetRepository,
@@ -25,7 +25,9 @@ export class ParkVehicleHandler {
    * @returns {void}
    */
   handle(command: ParkVehicleCommand): void {
-    const fleet: Fleet | undefined = this.fleetRepository.find(command.fleetId);
+    const fleet: Fleet | undefined = this.fleetRepository.findById(
+      command.fleetId,
+    );
     if (!fleet || !fleet.hasVehicle(command.vehicleId)) {
       throw new Error('Fleet or vehicle not found');
     }

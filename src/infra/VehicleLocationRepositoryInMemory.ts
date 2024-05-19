@@ -1,6 +1,9 @@
 import { Location } from '../domain/valuesObject/Location';
+import { VehicleLocationRepository } from '../domain/repositories/VehicleLocationRepository';
 
-export class VehicleLocationRepository {
+export class VehicleLocationRepositoryInMemory
+  implements VehicleLocationRepository
+{
   private locations: Map<string, Location> = new Map();
 
   saveLocation(vehicleId: string, location: Location): void {

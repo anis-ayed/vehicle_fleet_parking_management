@@ -1,4 +1,4 @@
-import { FleetRepository } from '../../src/infra/FeetRepository';
+import { FleetRepository } from '../../src/infra/FleetRepositoryInMemory';
 import { Given, Then, When } from 'cucumber';
 import { Fleet } from '../../src/domain/entities/Feet';
 import { Vehicle } from '../../src/domain/entities/Vehicle';

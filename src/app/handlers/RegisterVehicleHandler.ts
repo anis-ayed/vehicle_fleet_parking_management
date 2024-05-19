@@ -1,7 +1,6 @@
 import { RegisterVehicleCommand } from '../commands/RegisterVehicleCommand';
-import { Vehicle } from '../../domain/entities/Vehicle';
 import { Fleet } from '../../domain/entities/Feet';
-import { FleetRepository } from '../../infra/FeetRepository';
+import { FleetRepository } from '../../domain/repositories/FleetRepository';
 
 /**
  * Handler for registering a vehicle.
@@ -20,7 +19,9 @@ export class RegisterVehicleHandler {
    * @returns {void}
    */
   handle(command: RegisterVehicleCommand): void {
-    const fleet: Fleet | undefined = this.fleetRepository.find(command.fleetId);
+    const fleet: Fleet | undefined = this.fleetRepository.findById(
+      command.fleetId,
+    );
     if (!fleet) {
       throw new Error('Fleet not found');
     }
