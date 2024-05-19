@@ -27,7 +27,7 @@ export class ParkVehicleHandler {
   handle(command: ParkVehicleCommand): void {
     const fleet: Fleet | undefined = this.fleetRepository.findById(
       command.fleetId,
-    );
+    ) as Fleet;
     if (!fleet || !fleet.hasVehicle(command.vehicleId)) {
       throw new Error('Fleet or vehicle not found');
     }

@@ -1,6 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
+import { Document } from 'mongoose';
 
-export const locationModel = new mongoose.Schema({
+/**
+ * Represents a geographic location.
+ * @interface
+ */
+export interface ILocation extends Document {
+  latitude: number;
+  longitude: number;
+  altitude?: number;
+}
+
+const locationSchema = new Schema<ILocation>({
   latitude: {
     type: Number,
     required: true,
@@ -13,3 +24,8 @@ export const locationModel = new mongoose.Schema({
     type: Number,
   },
 });
+
+export const LocationModel: Model<ILocation> = mongoose.model<ILocation>(
+  'Location',
+  locationSchema,
+);

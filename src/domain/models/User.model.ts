@@ -1,6 +1,10 @@
-import mongoose, { Schema } from 'mongoose';
-
-export const userModel = new mongoose.Schema({
+import mongoose, { Model, Schema } from 'mongoose';
+import { Document } from 'mongoose';
+export interface IUser extends Document {
+  name: string;
+  fleets: any;
+}
+export const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -10,3 +14,8 @@ export const userModel = new mongoose.Schema({
     ref: 'Fleet',
   },
 });
+
+export const UserModel: Model<IUser> = mongoose.model<IUser>(
+  'User',
+  userSchema,
+);

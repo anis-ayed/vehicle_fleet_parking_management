@@ -6,11 +6,13 @@ export class VehicleLocationRepositoryInMemory
 {
   private locations: Map<string, Location> = new Map();
 
-  saveLocation(vehicleId: string, location: Location): void {
-    this.locations.set(vehicleId, location);
+  findLocation(
+    vehicleId: string,
+  ): Location | Promise<Location | null> | null | undefined {
+    return this.locations.get(vehicleId);
   }
 
-  findLocation(vehicleId: string): Location | undefined {
-    return this.locations.get(vehicleId);
+  saveLocation(vehicleId: string, location: Location): void {
+    this.locations.set(vehicleId, location);
   }
 }

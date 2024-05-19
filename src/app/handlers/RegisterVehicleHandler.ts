@@ -21,7 +21,7 @@ export class RegisterVehicleHandler {
   handle(command: RegisterVehicleCommand): void {
     const fleet: Fleet | undefined = this.fleetRepository.findById(
       command.fleetId,
-    );
+    ) as Fleet;
     if (!fleet) {
       throw new Error('Fleet not found');
     }

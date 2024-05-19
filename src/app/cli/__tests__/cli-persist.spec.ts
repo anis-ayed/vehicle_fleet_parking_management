@@ -1,35 +1,40 @@
 import { CliController } from '../cli';
-import { FleetRepositoryInMemory } from '../../../infra/FleetRepositoryInMemory';
-import { VehicleLocationRepositoryInMemory } from '../../../infra/VehicleLocationRepositoryInMemory';
 import { Fleet } from '../../../domain/entities/Feet';
 import { Vehicle } from '../../../domain/entities/Vehicle';
 import { FleetRepository } from '../../../domain/repositories/FleetRepository';
 import { VehicleLocationRepository } from '../../../domain/repositories/VehicleLocationRepository';
+import { FleetRepositoryInMongodb } from '../../../infra/mongodb/FleetRepositoryInMongodb';
+import { VehicleLocationRepositoryInMongodb } from '../../../infra/mongodb/VehicleLocationRepositoryInMongodb';
+import { Database } from '../../../infra/db/Database';
+import { IUser, UserModel } from '../../../domain/models/User.model';
+import { User } from '../../../domain/entities/User';
 
 describe('CliController', () => {
   let cliController: CliController;
   let fleetRepository: FleetRepository;
   let vehicleLocationRepository: VehicleLocationRepository;
+  const db = new Database();
+  const user: IUser = new UserModel({ name: 'user1', fleets: null });
+  let savedUser: IUser;
 
-  beforeEach(() => {
-    fleetRepository = new FleetRepositoryInMemory();
-    vehicleLocationRepository = new VehicleLocationRepositoryInMemory();
+  beforeEach(async () => {
+    fleetRepository = new FleetRepositoryInMongodb();
+    vehicleLocationRepository = new VehicleLocationRepositoryInMongodb();
     cliController = new CliController(
       fleetRepository,
       vehicleLocationRepository,
     );
+    savedUser = await user.save();
   });
+  afterAll(async () => db.disconnect());
 
-  it('should create a fleet', () => {
+  it('should create a fleet', async () => {
     const logSpy = jest.spyOn(console, 'log').mockImplementation();
-    const userId = 'user1';
+    const userId = savedUser._id as string;
     cliController.run(['node', 'cli', 'create', userId]);
 
-    // @ts-ignore
-    const savedFleet = fleetRepository.findById(
-      // @ts-ignore
-      Array.from(fleetRepository.findAll().values())[0].id,
-    ) as Fleet;
+    const allFleet: Fleet[] = (await fleetRepository.findAll()) as Fleet[];
+    const savedFleet: Fleet = fleetRepository.findById(allFleet[0].id) as Fleet;
     expect(savedFleet).not.toBeUndefined();
     expect(savedFleet?.userId).toBe(userId);
     expect(logSpy).toHaveBeenCalled();

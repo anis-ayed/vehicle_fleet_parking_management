@@ -33,6 +33,7 @@ describe('FleetRepositoryInMemory', () => {
 
     const allFleets = repository.findAll();
 
+    // @ts-ignore
     expect(allFleets.size).toBe(2);
   });
 });
