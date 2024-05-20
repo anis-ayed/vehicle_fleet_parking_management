@@ -1,7 +1,7 @@
 const fizzBuzz = (n: number): void => {
 
   if (n < 1) {
-    throw new Error ('please enter a number greater than 1');
+    throw new Error ('please enter a number greater than 0');
   }
 
   for (let i = 1; i <= n; i++) {
